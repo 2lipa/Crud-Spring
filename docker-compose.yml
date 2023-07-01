@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: crudfelipe
+      POSTGRES_PASSWORD: 123
+      PGDATA: /data/postgres
+    volumes:
+      - db_data:/data/postgres
+    ports:
+      - "5332:5432"
+    networks:
+      - db_network
+    restart: unless-stopped
+
+networks:
+  db_network:
+    driver: bridge
+
+volumes:
+  db_data:
+
