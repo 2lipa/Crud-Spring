@@ -2,9 +2,11 @@ package com.newproject;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootApplication
 @RestController
@@ -37,6 +39,20 @@ public class Main {
         customer.setEmail(request.email());
         customer.setAge(request.age());
         customerRepository.save(customer);
+    }
+
+    @PutMapping("{customerId}")
+    public void updateCustomer(@PathVariable("customerId") Integer id, @RequestBody NewCustomerRequest request) {
+        Optional<Customer> optionalCustomer = customerRepository.findById(id);
+        if (optionalCustomer.isPresent()){
+            Customer existingCustomer = optionalCustomer.get();
+            existingCustomer.setName(request.name());
+            existingCustomer.setEmail(request.email());
+            existingCustomer.setAge(request.age());
+            customerRepository.save(existingCustomer);
+        } else {
+            throw new RuntimeException("Cliente não encontrado com o ID: " + id);
+        }
     }
 
     @DeleteMapping("{customerId}")
